@@ -2,6 +2,8 @@ from urllib.request import urlopen
 import numpy as np
 from scipy import misc
 from skimage.measure import structural_similarity as ssim
+import time
+import sys
 
 def main():
 # Read URL input
@@ -42,10 +44,14 @@ def comp():
 			image2 = misc.imresize(image2, size, interp='bilinear', mode=None)	
 	grey1 = np.zeros((image1.shape[0], image1.shape[1])) # init 2D numpy array
 	print('Converting 1st image to greyscale....')
-	for rownum in range(len(image1)):
-   		for colnum in range(len(image1[rownum])):
-      			grey1[rownum][colnum] = average(image1[rownum][colnum])
-	misc.imsave('grey1.jpg', grey1)
+	for i in range(100):
+		sys.stdout.write("\r%d%%" % i)
+		for rownum in range(len(image1)):
+			for colnum in range(len(image1[rownum])):
+				grey1[rownum][colnum] = average(image1[rownum][colnum])
+		misc.imsave('grey1.jpg', grey1)
+		sys.stdout.flush()
+
 	print('Converting 2nd image to greyscale.....')
 	grey2 = np.zeros((image2.shape[0], image2.shape[1])) # init 2D numpy array
 	for rownum in range(len(image2)):
