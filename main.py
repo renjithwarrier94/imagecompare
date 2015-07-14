@@ -66,10 +66,11 @@ def comp():
 				sys.stdout.write("\r%d%%" % i)
 		misc.imsave('grey1.jpg', grey1)
 		sys.stdout.flush()
+		grey1 = grey1.astype(np.uint8)
 	else:
 		print('Image1 is already greyscale')
 		grey1 = image1
-		grey1 = grey1.astype(np.float64)
+		#grey1 = grey1.astype(np.float64)
 		misc.imsave('grey1.jpg', grey1)
 	print('Dtype im1: ', grey1.dtype)
 	grey2 = np.zeros((image2.shape[0], image2.shape[1]))
@@ -83,11 +84,12 @@ def comp():
 				i = (c/res)*100
 				sys.stdout.write("\r%d%%" % i)
 		misc.imsave('grey2.jpg', grey2)
+		grey2 = grey2.astype(np.uint8)
 		print('\n\nCompleted!')
 	else:
 		print('Image2 is already greyscale')
 		grey2 = image2
-		grey2 = grey2.astype(np.float64)
+		#grey2 = grey2.astype(np.float64)
 		misc.imsave('grey2.jpg', grey2)
 	print('Dtype im2: ', grey2.dtype)
 	print('Comparing images......')
