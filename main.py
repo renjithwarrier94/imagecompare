@@ -101,6 +101,10 @@ def compare():
 def average(pixel):
 	return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
 
+def uvval(pixel):
+	a= (-0.14713) * pixel[0] + (-0.28886) * pixel[1] + 0.436 * pixel[2]
+	b= 0.615 * pixel[0] + (-0.51499) * pixel[1] + (-0.10001) * pixel[2]
+    return {a,b}
 
 # Calculate Structural Similarity Index
 # Check if SSIM>threshold to determine if they are similar
