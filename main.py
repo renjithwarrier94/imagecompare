@@ -93,6 +93,9 @@ def comp():
 
     print('Comparing images......')
     similarity = ssim(grey1, grey2)
+    if(similarity < 0):
+        print("\nSecond Image maybe an Inverted version of the first")
+    similarity= math.fabs(similarity)
     similarity = similarity * 100
     print('Similarity: ', similarity, '%')
     if (similarity >= 90 and similarity <= 100):
