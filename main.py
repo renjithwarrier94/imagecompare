@@ -62,13 +62,17 @@ def comp():
 	grey2 = np.zeros((image2.shape[0], image2.shape[1])) # init 2D numpy array
 	c = 0
 	for rownum in range(len(image2)):
-   		for colnum in range(len(image2[rownum])):
-      			grey2[rownum][colnum] = average(image2[rownum][colnum])
+		for colnum in range(len(image2[rownum])):
+			grey2[rownum][colnum] = average(image2[rownum][colnum])
+			c+=1
+			i = (c/res)*100
+			sys.stdout.write("\r%d%%" % i)
 	misc.imsave('grey2.jpg', grey2)
 	print('\n\nCompleted!')
 	print('Comparing images......')
 	s = ssim(grey1, grey2)
-	print('SSIM: ', s)
+	s = ((s+1)/2)*100
+	print('Similarity: ', s, '%')
 
 
 #weighted average of image=R*0.299 + G*0.587 + B*0.114 per pixel
