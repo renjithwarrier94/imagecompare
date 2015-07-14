@@ -94,7 +94,7 @@ def comp():
 	print('Dtype im2: ', grey2.dtype)
 	print('Comparing images......')
 	s = ssim(grey1, grey2)
-	s = ((s+1)/2)*100
+	s = s*100
 	print('Similarity: ', s, '%')
 	if(s>=90 and s<=100):
 		print("\nImages are very similar")
