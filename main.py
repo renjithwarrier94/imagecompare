@@ -44,21 +44,31 @@ def comp():
 			image2 = misc.imresize(image2, size, interp='bicubic', mode=None)	
 	grey1 = np.zeros((image1.shape[0], image1.shape[1])) # init 2D numpy array
 	print('Converting 1st image to greyscale....')
-	for i in range(100):
-		sys.stdout.write("\r%d%%" % i)
-		for rownum in range(len(image1)):
-			for colnum in range(len(image1[rownum])):
-				grey1[rownum][colnum] = average(image1[rownum][colnum])
-		misc.imsave('grey1.jpg', grey1)
-		sys.stdout.flush()
+	count = 0
+	if(res1 < res2):
+		res = res1
+	else:
+		res = res2
+	for rownum in range(len(image1)):
+		for colnum in range(len(image1[rownum])):
+			grey1[rownum][colnum] = average(image1[rownum][colnum])
+			count = count+1
+			i = (count/res)*100
+			sys.stdout.write("\r%d%%" % i)
+	misc.imsave('grey1.jpg', grey1)
+	sys.stdout.flush()
 
-	print('Converting 2nd image to greyscale.....')
+	print('\n\nConverting 2nd image to greyscale.....')
 	grey2 = np.zeros((image2.shape[0], image2.shape[1])) # init 2D numpy array
+	c = 0
 	for rownum in range(len(image2)):
    		for colnum in range(len(image2[rownum])):
       			grey2[rownum][colnum] = average(image2[rownum][colnum])
+			c+=1
+			i = (c/res)*100
+			sys.stdout.write("\r%d%%" % i)
 	misc.imsave('grey2.jpg', grey2)
-	print('Completed!')
+	print('\n\nCompleted!')
 	print('Comparing images......')
 	s = ssim(grey1, grey2)
 	print('SSIM: ', s)
