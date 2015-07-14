@@ -64,9 +64,6 @@ def comp():
 	for rownum in range(len(image2)):
    		for colnum in range(len(image2[rownum])):
       			grey2[rownum][colnum] = average(image2[rownum][colnum])
-			c+=1
-			i = (c/res)*100
-			sys.stdout.write("\r%d%%" % i)
 	misc.imsave('grey2.jpg', grey2)
 	print('\n\nCompleted!')
 	print('Comparing images......')
