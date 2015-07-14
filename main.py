@@ -25,7 +25,6 @@ def main():
 
 
 # Convert to Grayscale
-
 def greyscale(image, resolution):
     if (len(image.shape) == 3):
         greyscale = 0
@@ -37,7 +36,7 @@ def greyscale(image, resolution):
         count = 0
         for row in range(len(image)):
             for column in range(len(image[row])):
-                grey[row][column] = average(image[row][column])
+                grey[row][column] = average(image[row][column]) # Grey is given by avg of RGB vals
                 count = count + 1
                 progress = (count / resolution) * 100
                 sys.stdout.write('\r%d%%' % progress)
@@ -49,8 +48,7 @@ def greyscale(image, resolution):
     return grey
 
 
-# Flip Function
-
+# Horizontal Flip Function
 def horizontal_flip(image):
     row = image.shape[0]
     column = image.shape[1]
@@ -60,6 +58,7 @@ def horizontal_flip(image):
             flip_img[r][column-c-1] = image[r][c]
     return flip_img
 
+# Vertical Flip Function
 def vertical_flip(image):
     row = image.shape[0]
     column = image.shape[1]
@@ -69,7 +68,7 @@ def vertical_flip(image):
             flip_img[row-1-r][c] = image[r][c]
     return flip_img
 
-# Comaprison Function
+# Comparison Function
 def compare():
     image1 = misc.imread('Image1.jpg')
     image2 = misc.imread('Image2.jpg')
@@ -87,6 +86,7 @@ def compare():
     else:
         resolution = resolution2
 
+	# Compute greyscale images for SSIM
     print('\nProcessing First Image...\n')
     grey1 = greyscale(image1, resolution)
     print('\n\nProcessing Complete.')
@@ -96,7 +96,7 @@ def compare():
     misc.imsave('Greyscale2.jpg', grey2)
     print('\n\nProcessing Complete.')
 
-# Calculate Structural Similarity Index
+	# Calculate Structural Similarity Index
     print('\nComparing Images...')
     similarity = ssim(grey1, grey2)
     if (similarity < 0):
@@ -105,8 +105,7 @@ def compare():
     similarity = similarity * 100
     print('\nSimilarity --> ', similarity, '%')
 
-# Check if SSIM>threshold to determine if they are similar
-
+	# Check if SSIM>threshold to determine if they are similar
     if (similarity == 100):
         print('\nThe Images are Same.')
     elif (similarity >= 90):
@@ -126,8 +125,9 @@ def compare():
     vertical_flip_image = vertical_flip_image.astype(np.uint8)
     horizontal_flip_image = horizontal_flip_image.astype(np.uint8)
 
-#    misc.imsave('HorizontalFlip.jpg', horizontal_flip_image)
-#    misc.imsave('VerticalFlip.jpg', vertical_flip_image)
+    # Uncomment the following lines to save flipped images to disk.
+	# misc.imsave('HorizontalFlip.jpg', horizontal_flip_image)
+	# misc.imsave('VerticalFlip.jpg', vertical_flip_image)
 
     similarity1 = ssim(horizontal_flip_image, grey1)
     if (similarity1 < 0):
@@ -143,13 +143,13 @@ def compare():
 
     if(difference1 >40):
         print('\nThe Images are most likely Horizontally Flipped.')
-        print('\nHorizontal Flip Similarity --> ', similarity1)
+        print('\nHorizontal Flip Similarity --> ', similarity1, '%')
     if(difference2 >40):
         print('\nThe Images are most likely Vertically Flipped.')
-        print('\nVertical Flip Similarity --> ',similarity2)
+        print('\nVertical Flip Similarity --> ',similarity2, '%')
 
 def average(pixel):
-    return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
+    return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2] # Average luminescence value of a pixel (Y' value)
 
 if __name__ == '__main__':
     main()
