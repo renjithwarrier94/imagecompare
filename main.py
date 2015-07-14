@@ -2,120 +2,104 @@ from urllib.request import urlopen
 import numpy as np
 from scipy import misc
 from skimage.measure import structural_similarity as ssim
-import time
 import sys
-
+import math
 
 def main():
-    # Read URL input
-    file1 = open('Image1.jpg', 'wb')
-    file2 = open('Image2.jpg', 'wb')
-    url1 = input('Enter the URL of the first image, please --> ')
-    url2 = input('Enter the URL of the second image, please --> ')
-    file1.write(urlopen(url1).read())
-    print('First Image has downloaded successfully.')
-    file2.write(urlopen(url2).read())
-    print('Second Image has downloaded successfully.')
-    file1.close()
-    file2.close()
-    comp()
+	# Reading URL inputs separately
+	file1 = open('Image1.jpg', 'wb')
+	file2 = open('Image2.jpg', 'wb')
+	url1 = input('\nEnter the URL of the first image -->')
+	print('\nDownloading First Image...')
+	file1.write(urlopen(url1).read())
+	print('\nDownload has Completed Successfuly.')
+	url2 = input('\nEnter the URL of the second image --> ')
+	print('\nDownloading Second Image...')
+	file2.write(urlopen(url2).read())
+	print('\nDownload has Completed Successfully.')
+	file1.close()
+	file2.close()
+
+	compare()
 
 
 # Convert to Grayscale
-# def greyscale(image)
+
+def greyscale(image, resolution):
+	if (len(image.shape) == 3):
+		greyscale = 0
+	else:
+		greyscale = 1
+
+	grey = np.zeros((image.shape[0], image.shape[1]))  # init 2D numpy array
+	if (greyscale == 0):
+		count = 0
+		for row in range(len(image)):
+			for column in range(len(image[row])):
+				grey[row][column] = average(image[row][column])
+				count = count + 1
+				progress = (count / resolution) * 100
+				sys.stdout.write('\r%d%%' % progress)
+		sys.stdout.flush()
+		grey = grey.astype(np.uint8)
+	else:
+		grey = image
+		print('100%')
+	return grey
 
 
-# Comaprison
-def comp():
-    image1 = misc.imread('Image1.jpg')
-    image2 = misc.imread('Image2.jpg')
-    resolution1 = image1.shape[0] * image1.shape[1]
-    resolution2 = image2.shape[0] * image2.shape[1]
-    if (len(image1.shape) == 3):
-        greyscale1 = 0
-    else:
-        greyscale1 = 1
-    if (len(image2.shape) == 3):
-        greyscale2 = 0
-    else:
-        greyscale2 = 1
-    if (resolution1 != resolution2):
-        if (resolution1 > resolution2):
-            size = (image2.shape[0], image2.shape[1])
-            image1 = misc.imresize(image1, size, interp='bicubic', mode=None)
-        else:
-            size = (image1.shape[0], image1.shape[1])
-            image2 = misc.imresize(image2, size, interp='bicubic', mode=None)
-    if (resolution1 < resolution2):
-        resolution = resolution1
-    else:
-        resolution = resolution2
+# Comaprison Function
+def compare():
+	image1 = misc.imread('Image1.jpg')
+	image2 = misc.imread('Image2.jpg')
+	resolution1 = image1.shape[0] * image1.shape[1]
+	resolution2 = image2.shape[0] * image2.shape[1]
+	if (resolution1 != resolution2):
+		if (resolution1 > resolution2):
+			size = (image2.shape[0], image2.shape[1])
+			image1 = misc.imresize(image1, size, interp='bicubic', mode=None)
+		else:
+			size = (image1.shape[0], image1.shape[1])
+			image2 = misc.imresize(image2, size, interp='bicubic', mode=None)
+	if (resolution1 < resolution2):
+		resolution = resolution1
+	else:
+		resolution = resolution2
 
-    grey1 = np.zeros((image1.shape[0], image1.shape[1]))  # init 2D numpy array
-    print('Converting 1st image to greyscale....')
-    #	grey1 = greyscale(image1)
-    #	grey2 = greyscale(image2)
+	print('\nProcessing First Image...\n')
+	grey1 = greyscale(image1, resolution)
+	print('\n\nProcessing Complete.')
+	misc.imsave('Greyscale1.jpg', grey1)
+	print('\nProcessing Second Image...\n')
+	grey2 = greyscale(image2, resolution)
+	misc.imsave('Greyscale2.jpg', grey2)
+	print('\n\nProcessing Complete.')
 
-    if (greyscale1 == 0):
-        count = 0
-        for row in range(len(image1)):
-            for column in range(len(image1[row])):
-                grey1[row][column] = average(image1[row][column])
-                count = count + 1
-                progress = (count / resolution) * 100
-                sys.stdout.write("\r%d%%" % progress)
-        misc.imsave('Greyscale1.jpg', grey1)
-        sys.stdout.flush()
-        grey1 = grey1.astype(np.uint8)
-    else:
-        print('Image1 is already in Greyscale Format')
-        grey1 = image1
-        misc.imsave('Greyscale1.jpg', grey1)
+	print('\nComparing Images...')
+	similarity = ssim(grey1, grey2)
+	if(similarity < 0):
+		print("\nSecond Image maybe an Inverted version of the first")
+		similarity *= -1
+	similarity = similarity * 100
+	print('\nSimilarity --> ', similarity, '%')
+	if (similarity == 100):
+		print('\nThe Images are Same.')
+	elif (similarity >= 90):
+		print('\nThe Images are Identical.')
+	elif (similarity >= 75):
+		print('\nThe Images are Similar.')
+	elif (similarity >= 50):
+		print('\nThe Images are Vaguely Similar.')
+	elif (similarity >= 25):
+		print('\nThe Images are Slightly Different.')
+	elif (similarity >= 1):
+		print('\nThe Images are Dissimilar.')
+	else:
+		print('\nThe Images are Distinct.')
 
-    grey2 = np.zeros((image2.shape[0], image2.shape[1]))
-    if (greyscale2 == 0):
-        print('\n\nConverting 2nd image to greyscale.....')
-        count = 0
-        for row in range(len(image2)):
-            for col in range(len(image2[row])):
-                grey2[row][col] = average(image2[row][col])
-                count += 1
-                progress = (count / resolution) * 100
-                sys.stdout.write("\r%d%%" % progress)
-
-        misc.imsave('Greyscale2.jpg', grey2)
-        grey2 = grey2.astype(np.uint8)
-        print('Conversion Completed!')
-    else:
-        print('Image2 is already in Greyscale Format')
-        grey2 = image2
-        misc.imsave('Greyscale2.jpg', grey2)
-
-    print('Comparing images......')
-    similarity = ssim(grey1, grey2)
-    if(similarity < 0):
-        print("\nSecond Image maybe an Inverted version of the first")
-    similarity= math.fabs(similarity)
-    similarity = similarity * 100
-    print('Similarity: ', similarity, '%')
-    if (similarity >= 90 and similarity <= 100):
-        print("\nImages are very similar")
-    elif (similarity >= 75 and similarity < 90):
-        print("\nImages are quite similar")
-    elif (similarity >= 50 and similarity < 75):
-        print("\nImages are vaguely similar")
-    elif (similarity >= 25 and similarity < 50):
-        print("\nImages have low similarity ")
-    elif (similarity >= 1 and similarity < 25):
-        print("\nImages have very low similarity")
-    else:
-        print("\n Images are Different")
-
-
-# weighted average of image=R*0.299 + G*0.587 + B*0.114 per pixel
 
 def average(pixel):
-    return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
+	return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
 
 
 # Calculate Structural Similarity Index
@@ -123,4 +107,4 @@ def average(pixel):
 
 
 if __name__ == '__main__':
-    main()
+	main()
