@@ -58,6 +58,7 @@ def comp():
 	print('Converting 1st image to greyscale....')
 	if(g1 == 0):
 		count = 0
+		print('Hello')
 		for rownum in range(len(image1)):
 			for colnum in range(len(image1[rownum])):
 				grey1[rownum][colnum] = average(image1[rownum][colnum])
@@ -77,6 +78,7 @@ def comp():
 	if(g2 == 0):
 		print('\n\nConverting 2nd image to greyscale.....')
 		c = 0
+		print('Hello')
 		for rownum in range(len(image2)):
 			for colnum in range(len(image2[rownum])):
 				grey2[rownum][colnum] = average(image2[rownum][colnum])
