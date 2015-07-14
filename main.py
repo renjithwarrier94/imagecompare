@@ -69,12 +69,12 @@ def comp():
 	else:
 		print('Image1 is already greyscale')
 		grey1 = image1
-		print(image1.shape)
-		print(grey1.shape)
+		grey1 = grey1.astype(np.float64)
+		misc.imsave('grey1.jpg', grey1)
+	print('Dtype im1: ', grey1.dtype)
 	grey2 = np.zeros((image2.shape[0], image2.shape[1]))
 	if(g2 == 0):
 		print('\n\nConverting 2nd image to greyscale.....')
-		#grey2 = np.zeros((image2.shape[0], image2.shape[1])) # init 2D numpy array
 		c = 0
 		for rownum in range(len(image2)):
 			for colnum in range(len(image2[rownum])):
@@ -87,7 +87,9 @@ def comp():
 	else:
 		print('Image2 is already greyscale')
 		grey2 = image2
-	print(grey2.shape)
+		grey2 = grey2.astype(np.float64)
+		misc.imsave('grey2.jpg', grey2)
+	print('Dtype im2: ', grey2.dtype)
 	print('Comparing images......')
 	s = ssim(grey1, grey2)
 	s = ((s+1)/2)*100
