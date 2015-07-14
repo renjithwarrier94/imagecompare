@@ -17,8 +17,16 @@
    4. Run main.py from command line.
    
 # Example
-  Link 1 - [Black Colour] - http://cdn3.howtogeek.com/wp-content/uploads/2012/12/Plain-Black-Wallpaper.png
-  Link 2 - [White Colour] - http://mobcup.co/content/jwt/944522
+* Example 1
+  1. [Black Colour] - http://cdn3.howtogeek.com/wp-content/uploads/2012/12/Plain-Black-Wallpaper.png
+  2. [White Colour] - http://mobcup.co/content/jwt/944522
+
+  SSIM = 0.00%
+* Example 2
+  1. https://lh5.googleusercontent.com/-otxXaCcmkqU/AAAAAAAAAAI/AAAAAAAAAEA/3Ey8OYmb_Ig/photo.jpg
+  2. https://lh3.googleusercontent.com/-otxXaCcmkqU/AAAAAAAAAAI/AAAAAAAAAEA/3Ey8OYmb_Ig/s120-c/photo.jpg
+  
+  SSIM = 97.88%
 
 # Known Issues
 * Cannot handle GIF files.
