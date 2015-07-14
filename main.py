@@ -94,17 +94,17 @@ def comp():
 	s = ssim(grey1, grey2)
 	s = ((s+1)/2)*100
 	print('Similarity: ', s, '%')
-	if(s>=90 && s<=100):
+	if(s>=90 and s<=100):
 		print("\nImages are very similar")
-	elif(s>=75 && s<90):
+	elif(s>=75 and s<90):
 		print("\nImages are quite similar")
-	elif(s>=50 && s<75):
+	elif(s>=50 and s<75):
 		print("\nImages are vaguely similar")
-	elif(s>=25 && s<50):
+	elif(s>=25 and s<50):
 		print("\nImages have low similarity ")
-	elif(s>=1 && s<25):
+	elif(s>=1 and s<25):
 		print("\nImages have very low similarity")
-	else
+	else:
 		print("\n Images are Different")
 
 #weighted average of image=R*0.299 + G*0.587 + B*0.114 per pixel
